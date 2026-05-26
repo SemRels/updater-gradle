@@ -1,46 +1,45 @@
 # updater-gradle
 
-Gradle package updater plugin for SemRel.
+Updates a Gradle version property.
 
-Updates Gradle project versions in version.properties and build.gradle style files.
+This plugin is distributed as the standalone Go binary `semrel-plugin-updater-gradle`. Semrel executes the binary as a subprocess, provides plugin configuration through `SEMREL_PLUGIN_*` environment variables, provides release context through `SEMREL_*` environment variables, reads standard output, and treats exit code `0` as success and any non-zero exit code as failure. Install the binary in `~/.semrel/plugins/` or anywhere on your `$PATH`.
 
-## Documentation
+## Installation
 
-- SemRel docs (planned): <https://github.com/SemRels/semrel/tree/main/docs/plugins/updater-gradle>
-- Plugin template: <https://github.com/SemRels/plugin-template>
-- Registry: <https://registry.semrel.io>
+```bash
+go install github.com/SemRels/updater-gradle/cmd/plugin@latest
+```
 
-## Repository Layout
+## Configuration
 
-~~~text
-cmd/plugin/              Plugin entry point
-internal/plugin/         Business logic scaffold
-internal/grpc/           gRPC transport scaffold
-proto/v1                 Symlink to the SemRel protobuf contract
-.github/workflows/       CI, release, and security automation
-~~~
-
-## Development
-
-~~~bash
-go build ./cmd/plugin
-go test ./...
-~~~
-
-## Configuration Example
-
-~~~yaml
+```yaml
 plugins:
   - name: updater-gradle
-    type: updater
-    config:
-      property_file: gradle/version.properties
-      property_name: version
-      build_files:
-        - build.gradle
-        - build.gradle.kts
-~~~
+    path: ~/.semrel/plugins/semrel-plugin-updater-gradle
+    env:
+      SEMREL_PLUGIN_FILE: "gradle.properties"
+      SEMREL_PLUGIN_KEY: "version"
+```
 
-## Status
+## `SEMREL_PLUGIN_*` variables
 
-This repository is bootstrapped from SemRels/plugin-template and is ready for implementation.
+| Name | Required | Description | Default |
+| --- | --- | --- | --- |
+| `SEMREL_PLUGIN_FILE` | Optional | Path to the Gradle properties file to update. | gradle.properties |
+| `SEMREL_PLUGIN_KEY` | Optional | Property key that stores the version. | version |
+
+## `SEMREL_*` release context used
+
+| Variable | Description |
+| --- | --- |
+| `SEMREL_VERSION` | Resolved release version for the current run. |
+| `SEMREL_NEXT_VERSION` | Next version computed by semrel for the release. |
+| `SEMREL_DRY_RUN` | Whether semrel is running in dry-run mode. |
+
+## Example behavior
+
+The plugin updates the configured Gradle property to the new version and logs the file change.
+
+## License
+
+Apache-2.0
