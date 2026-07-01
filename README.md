@@ -1,6 +1,6 @@
 # updater-gradle
 
-[![Latest Release](https://img.shields.io/github/v/release/SemRels/updater-gradle?label=version\&color=blue)](https://github.com/SemRels/updater-gradle/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/SemRels/updater-gradle?label=version&color=blue)](https://github.com/SemRels/updater-gradle/releases/latest)
 
 Updates a Gradle version property.
 
