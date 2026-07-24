@@ -14,7 +14,7 @@ func TestUpdaterUpdateBuildGradle(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(dir)
+	defer func() { _ = os.RemoveAll(dir) }()
 
 	file := filepath.Join(dir, "build.gradle")
 	if err := os.WriteFile(file, []byte("version = '1.2.3'\n"), 0o644); err != nil {
