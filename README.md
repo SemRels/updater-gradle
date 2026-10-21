@@ -39,19 +39,21 @@ cosign verify ghcr.io/semrels/updater-gradle:latest \
 
 ```yaml
 plugins:
-  - name: updater-gradle
-    path: ~/.semrel/plugins/semrel-plugin-updater-gradle
-    env:
-      SEMREL_PLUGIN_FILE: "gradle.properties"
-      SEMREL_PLUGIN_KEY: "version"
+  - uses: "@semrel/updater-gradle"
+    phase: pre-tag
+    args:
+      file: "gradle.properties"
+      key: "version"
 ```
 
-## `SEMREL_PLUGIN_*` variables
+## Options
 
-| Name | Required | Description | Default |
-| --- | --- | --- | --- |
-| `SEMREL_PLUGIN_FILE` | Optional | Path to the Gradle properties file to update. | gradle.properties |
-| `SEMREL_PLUGIN_KEY` | Optional | Property key that stores the version. | version |
+Every option can be set as an entry under `args` in `.semrel.yaml`. semrel passes each entry to the plugin as the environment variable shown in the table, so you can also set that variable directly (for example in your CI environment) instead of using `args`.
+
+| Argument | Environment variable | Required | Description | Default |
+| --- | --- | --- | --- | --- |
+| `file` | `SEMREL_PLUGIN_FILE` | Optional | Path to the Gradle properties file to update. | gradle.properties |
+| `key` | `SEMREL_PLUGIN_KEY` | Optional | Property key that stores the version. | version |
 
 ## `SEMREL_*` release context used
 
